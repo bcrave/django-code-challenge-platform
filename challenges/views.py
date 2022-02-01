@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+
+from challenges.models import Challenge
 from .forms import ChallengeForm
 
 def challenge_welcome(request):
@@ -7,7 +9,11 @@ def challenge_welcome(request):
 
 def challenge_submit(request):
   form = ChallengeForm()
+
   if request.method == 'POST':
-    print(request.POST)
+    form = ChallengeForm(request.POST)
+    if form.is_valid():
+      form.save()
   context = { 'form': form }
+  
   return render(request, 'challenge-submit.html', context)
